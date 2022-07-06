@@ -10,7 +10,7 @@ INSERT_BEAN = "INSERT INTO beans (name, method, rating) VALUES (?, ?, ?);"
 
 GET_ALL_BEANS = "SELECT * FROM beans;"
 
-GET_BEANS_BY_NAME = "SELECT * FROM beans WHERE name = ?;"
+GET_BEANS_BY_NAME = "SELECT * FROM beans WHERE name = ? ORDER BY rating DESC;"
 
 GET_BEST_METHOD = """
 SELECT * FROM beans 
