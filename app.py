@@ -16,7 +16,7 @@ Your selection:"""
 
 def menu():
     connection = database.connect()
-    database.create_tables(connection)
+    database.create_tables(connection, database.CREATE_BEANS_TABLE)
 
     while (user_input := input(MENU_PROMPT)) != "5":
         if user_input == "1":

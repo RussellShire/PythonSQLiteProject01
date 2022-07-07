@@ -27,9 +27,9 @@ def connect():
     return sqlite3.connect("data.db")
 
 
-def create_tables(connection):
+def create_tables(connection, table):
     with connection:
-        connection.execute(CREATE_BEANS_TABLE)
+        connection.execute(table)
 
 
 def add_bean(connection, name, method, rating):
@@ -53,12 +53,12 @@ def get_best_method(connection, name):
         return connection.execute(GET_BEST_METHOD, (name,)).fetchone()
 
 
-# created to make my prevously open text entries uniformly lowercase for GROUP BY funcitonality
+# created to make my previously open text entries uniformly lowercase for GROUP BY functionality
 def lowercase_database():
     connection = connect()
     with connection:
         connection.execute(LOWERCASE_DATABASE)
 
 
-# only needed to be ran once on older data that had been added before inputs were formatted to lower
+# only needed to be run once on older data that had been added before inputs were formatted to lower
 # lowercase_database()
