@@ -1,22 +1,28 @@
 # user interactions
 
 import database
+import bean_table
+
+# text for menu prompt
 
 MENU_PROMPT = """
 Please choose
 
-1) Add a coffee bean
-2) See all coffee beans
+1) Add a coffee bean review
+2) See all coffee bean reviews
 3) Find a coffee bean by name
 4) See how best to prepare a particular bean
 5) Exit.
 
 Your selection:"""
 
+# menu function that allows users to input options
+
 
 def menu():
     connection = database.connect()
-    database.create_tables(connection)
+    database.create_table(connection, database.CREATE_REVIEWS_TABLE)
+    database.create_table(connection, bean_table.CREATE_BEAN_TABLE)
 
     while (user_input := input(MENU_PROMPT)) != "5":
         if user_input == "1":
@@ -31,6 +37,9 @@ def menu():
             print("Invalid input, please try again")
 
 
+# functions for each menu prompt
+
+
 def prompt1_add_bean(connection):
     name = input("Enter Coffee Bean name: \n").lower()
     method = input("Enter how you prepared your coffee: \n").lower()
@@ -43,17 +52,17 @@ def prompt1_add_bean(connection):
 
 
 def prompt2_get_beans(connection):
-    beans = database.get_all_beans(connection)
+    reviews = database.get_all_beans(connection)
     # For loop prints each row as a new line (print(beans) prints them in a list)
-    for bean in beans:
+    for bean in reviews:
         print(f"{bean[1].title()} ({bean[2].title()}) - {bean[3]}/100")
 
 
 def prompt3_get_by_bean(connection):
     name = input("Enter coffee bean name:\n").lower()
 
-    beans = database.get_beans_by_name(connection, name)
-    for bean in beans:
+    reviews = database.get_beans_by_name(connection, name)
+    for bean in reviews:
         print(f"{bean[1].title()} ({bean[2].title()}) - {bean[3]}/100")
 
 

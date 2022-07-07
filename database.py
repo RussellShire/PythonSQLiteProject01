@@ -1,40 +1,46 @@
 # database interactions
 
 import sqlite3
+import bean_table
 
 # database queries as variables so they can be edited later
-CREATE_BEANS_TABLE = """
-CREATE TABLE IF NOT EXISTS beans (id INTEGER PRIMARY KEY, name TEXT, method TEXT, rating INTEGER);"""
+import Trigger
 
-INSERT_BEAN = "INSERT INTO beans (name, method, rating) VALUES (?, ?, ?);"
+CREATE_REVIEWS_TABLE = """
+CREATE TABLE IF NOT EXISTS reviews (id INTEGER PRIMARY KEY, name TEXT, method TEXT, rating INTEGER);"""
 
-GET_ALL_BEANS = "SELECT * FROM beans;"
+INSERT_BEAN = "INSERT INTO reviews (name, method, rating) VALUES (?, ?, ?);"
 
-GET_BEANS_BY_NAME = "SELECT * FROM beans WHERE name = ? ORDER BY rating DESC;"
+GET_ALL_BEANS = "SELECT * FROM reviews;"
+
+GET_BEANS_BY_NAME = "SELECT * FROM reviews WHERE name = ? ORDER BY rating DESC;"
 
 GET_BEST_METHOD = """
-SELECT * FROM beans 
+SELECT * FROM reviews 
 WHERE name = ?
 ORDER BY rating DESC
 LIMIT 1;"""
 
 LOWERCASE_DATABASE = """
-UPDATE beans
+UPDATE reviews
 SET name = LOWER(name), method = lower(method);"""
+
+# functions to call the SQL queries
 
 
 def connect():
     return sqlite3.connect("data.db")
 
 
-def create_tables(connection):
+def create_table(connection, table):
     with connection:
-        connection.execute(CREATE_BEANS_TABLE)
+        connection.execute(table)
 
 
 def add_bean(connection, name, method, rating):
     with connection:
         connection.execute(INSERT_BEAN, (name, method, rating))
+        connection.execute(bean_table.new_bean_trigger(connection, name))
 
 
 def get_all_beans(connection):
@@ -62,3 +68,6 @@ def lowercase_database():
 
 # only needed to be ran once on older data that had been added before inputs were formatted to lower
 # lowercase_database()
+connection = connect()
+print(connection.execute("SELECT * FROM beans;").fetchall())
+
